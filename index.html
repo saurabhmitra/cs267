@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+        <title>CS267 Saurabh Mitra</title> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- <link rel="icon" type="image/ico" href="images/computer-mouse-2.ico"> -->
+        <link rel="stylesheet" type="text/css" href="styles/main.css">
+        <script src="scripts/jquery.min.js"></script>
+        <!--<script src="scripts/Chart.min.js"></script>
+        <script type="text/javascript" src="scripts/mouse.js"></script> -->
+        <script type="text/javascript">
+            // This is a jQuery convention to say that once all the files
+            // load, the function Smile.start() should run.
+            // This function is defined in the smiles.js
+            $(function() {
+                // TODO: fix this thing
+                // Mouse.start();
+            });
+        </script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+        </div>
+        <a href="index.html" class="logo">
+            Saurabh Mitra
+        </a>
+    </header>
+    <img src="images/background3.jpg" class="bootstrap-faker">
+    <h1>CS 267 Assignment 0</h1>
+    <p class="subheading">Description of a Parallel Application - Rendering Big Hero 6 with Hyperion</p>
+
+    <div class="blurb">
+        <h2>Brief Bio</h2>
+        <p class="mission">I am an Electrical Engineering and Computer Science Master of Engineering student with a concentration in Visual Computing and Computer Graphics. I completed my undergrad at UC Berkeley, where I majored in EECS as well. My current research is in programmable materials - more specifically, embedding circuitry into tattoos. My interests lie mostly in computer graphics, including rendering, shading, and physical simulations of fluids, cloth, hair, etc. In this class, I hope to learn how to take advantage of large parallel systems, especially in the domain of copmuter graphics. I'm most interested in GPU programming, like CUDA and OpenCL, but I'm open to trying all sorts of projects.
+        </p>
+    </div>
+
+    <div class="blurb">
+        <h2>Parallel Application</h2>
+        <p class="mission">The parallel application I'm examining is the rendering of Pixar's Big Hero 6, which took a 55,000 core cluster (geographically spread over 4 locations, [1]) a total of 199,000,000 core-hours. Hyperion, the renderer, is a physically-based global-illumination-capable path tracing renderer, which means that it simulates the path of rays of light as they bounce from light sources to the camera, except in reverse, for efficiency. The color of each pixel is calculated by sending a few hundred or thousand rays in the direction from the center of projection of the camera to the pixel, and the rays use Monte Carlo sampling to randomly reflect, refract, and scatter as they interact with objects in the scene. In traditional path tracing implementations, each sample bounces once or twice until it is either retired or it hits a light source. However, this is not fully adequate for estimating the solution to the global illumination problem because rays may take more than a few bounces before they hit a light source. Thus, solving global illumination with pure path tracing and no artificial lighting is a difficult problem, but since each ray for each pixel is calculated independently, this computation can be distributed over many cores quite easily. However, any ray may bounce in any direction, and each cpu core may need to load an arbitrary object in the scene from RAM. With thousands of objects in each scene, potentially leading to billions of triangles, the RAM requirement for each machine is enormous. So for traditional path tracers, the lack of memory scalability bottlenecks the effectiveness of distributed computing. One of Hyperion's biggest innovations was the development of deferred shading [2], where rays are not computed immediately, but grouped into "bundles" of rays going in the same direction. Then, bundles are sent to other machines on the cluster that only have a portion of the full scene in memory in a way that rays will only be sent to machines that have the relevant geometry, not the entire scene. The materials of objects in the scene are usually physically accurate, and comparison to real physical results can be found here [3].
+        </p>
+    </div>
+    <div class="blurb">
+        <h2>References</h2>
+        <a href="http://www.engadget.com/2014/10/18/disney-big-hero-6/" class="link">[1]</a>
+        <a href="https://www.fxguide.com/featured/disneys-new-production-renderer-hyperion-yes-disney/" class="link">[2]</a>
+        <a href="http://www.disneyanimation.com/technology/innovations/hyperion" class="link">[3]</a>
+    </div>
+</body>
